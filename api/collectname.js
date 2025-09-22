@@ -1,25 +1,23 @@
-// This is the serverless function that Vercel will run
+// api/collectname.js
+import { kv } from '@vercel/kv';
+
 export default async (req, res) => {
-    // This function will only run for POST requests
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
 
     try {
-        // Get the data from the request body
         const { name } = req.body;
-
         if (!name) {
             return res.status(400).json({ message: 'Name is required.' });
         }
 
-        // ---
-        // Here's where you'd connect to a database to save the data.
-        // For this example, we'll just log it to the console.
-        console.log(`Received a new favorite person: ${name}`);
-        // ---
+        // Generate a unique ID for the entry
+        const entryId = Date.now().toString();
 
-        // Send a success response back to the front-end
+        // Save the name to Vercel KV
+        await kv.set(entryId, name);
+
         res.status(200).json({ message: 'Name received successfully!' });
 
     } catch (error) {

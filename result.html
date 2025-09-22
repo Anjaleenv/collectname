@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite People</title>
+    <style>
+        body { font-family: sans-serif; padding: 2em; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #f0f2f5; margin-bottom: 5px; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>All Favorite People</h1>
+    <ul id="names-list"></ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const list = document.getElementById('names-list');
+            list.innerHTML = 'Loading...';
+
+            try {
+                const response = await fetch('/api/getnames');
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.names && data.names.length > 0) {
+                        list.innerHTML = '';
+                        data.names.forEach(name => {
+                            const li = document.createElement('li');
+                            li.textContent = name;
+                            list.appendChild(li);
+                        });
+                    } else {
+                        list.innerHTML = 'No names submitted yet.';
+                    }
+                } else {
+                    list.innerHTML = 'Error fetching data.';
+                }
+            } catch (error) {
+                list.innerHTML = 'Network error: Failed to fetch data.';
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
