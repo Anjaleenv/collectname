@@ -23,8 +23,15 @@ document.getElementById('favorite-person-form').addEventListener('submit', async
             messageDiv.textContent = 'Thanks! Your favorite person has been saved. 🎉';
             document.getElementById('favorite-person-form').reset(); // Clear the form
         } else {
-            const errorData = await response.json();
-            messageDiv.textContent = `Error: ${errorData.message || 'Something went wrong.'}`;
+            let errorText = 'Something went wrong. Please try again.';
+            try {
+                const errorData = await response.json();
+                errorText = `Error: ${errorData.message || 'Something went wrong.'}`;
+            } catch (jsonError) {
+                // If the response is not valid JSON, use a generic error message.
+                console.error('Failed to parse error response as JSON:', jsonError);
+            }
+            messageDiv.textContent = errorText;
         }
     } catch (error) {
         messageDiv.textContent = `Network error: ${error.message}`;
