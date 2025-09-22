@@ -20,7 +20,7 @@
             list.innerHTML = 'Loading...';
 
             try {
-                const response = await fetch('/api/getnames');
+                const response = await fetch('/.netlify/functions/getnames');
                 const data = await response.json();
 
                 if (response.ok) {

@@ -11,7 +11,7 @@ document.getElementById('favorite-person-form').addEventListener('submit', async
     }
 
     try {
-        const response = await fetch('/api/collectname', { // This path points to your serverless function
+        const response = await fetch('/.netlify/functions/collectname', { // This path points to your serverless function
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
